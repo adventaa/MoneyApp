@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koin/pages/category_page.dart';
 import 'package:koin/pages/home_page.dart';
+import 'package:koin/pages/transaction_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}): super(key: key);
@@ -46,7 +47,15 @@ class  _MainPageState extends State <MainPage> {
         // kondisi ketika klik button home maka ada button add, jika klik button list maka button add hilang
         visible: (currentIndex == 0) ? true : false,
         child: FloatingActionButton(
-          onPressed: (){}, 
+          onPressed: () {
+            Navigator.of(context)
+            .push(MaterialPageRoute(
+              builder: (context) => TransactionPage(),
+              ))
+              .then((value){
+                setState(() {});
+              });
+          }, 
           backgroundColor: Colors.blue, 
           child: Icon(Icons.add),
         ),
