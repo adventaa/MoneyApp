@@ -6,8 +6,8 @@ import 'package:koin/models/category.dart';
 import 'package:koin/models/transaction.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-//import 'package:sqlite3/sqlite3.dart';
-//import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
+// import 'package:sqlite3/sqlite3.dart';
+// import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 // ... the TodoItems table definition stays the same
 
@@ -21,6 +21,23 @@ class AppDb extends _$AppDb {
 
   @override
   int get schemaVersion => 1;
+
+  // CRUD category
+
+  Future<List<Category>> getAllCategoryRepo(int type) async{
+    return await (select(categories)..where((tbl) => tbl.type.equals(type)))
+      .get();
+  }
+
+  Future updateCategoryRepo (int id, String name) async{
+    return (update(categories)..where((tbl) => tbl.id.equals(id)))
+      .write(CategoriesCompanion(name : Value(name)));
+  }
+
+  Future deleteCategoryRepo (int id) async{
+    return (delete(categories)..where((tbl) => tbl.id.equals(id)))
+      .go();
+  }
 }
 
 LazyDatabase _openConnection() {
