@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:koin/models/category.dart';
 import 'package:koin/models/transaction.dart';
+import 'package:koin/models/transaction_with_category.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 // import 'package:sqlite3/sqlite3.dart';
@@ -37,6 +38,22 @@ class AppDb extends _$AppDb {
   Future deleteCategoryRepo (int id) async{
     return (delete(categories)..where((tbl) => tbl.id.equals(id)))
       .go();
+  }
+
+  // transaction
+
+  Stream<List<TransactionWithCategory>>getTransactionByDateRepo(DateTime date){
+    final query = (select(transactions).join([
+      innerJoin(categories, categories.id.equalsExp(transactions.category_id))
+    ])
+      ..where(transactions.transcation_date.equals(date)));
+
+    return query.watch().map((rows){
+      return rows.map((row){
+        return TransactionWithCategory(
+          row.readTable(transactions), row.readTable(categories));
+      }).toList();
+    });
   }
 }
 

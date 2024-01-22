@@ -34,7 +34,7 @@ class _TransactionPageState extends State<TransactionPage> {
         amount: amount,
         createdAt: now,
         updatedAt: now));
-
+  print('add data lagi : ' + row.toString());
   }
 
   Future<List<Category>> getAllCategory(int type) async{
@@ -110,7 +110,9 @@ class _TransactionPageState extends State<TransactionPage> {
               }else{
                 if (snapshot.hasData){
                   if (snapshot.data!.length > 0){
-                    selectedCategory = snapshot.data!.first;
+                    selectedCategory = (selectedCategory == null)
+                       ? snapshot.data!.first
+                       : selectedCategory;
                     print('ada data : '+ snapshot.toString());
                     // untuk membuat tampilan menu drpodown button
                     return Padding(
@@ -193,6 +195,9 @@ class _TransactionPageState extends State<TransactionPage> {
               DateTime.parse(dateController.text),
               detailController.text,
               selectedCategory!.id);
+
+            // untuk kembali ke halaman utama setelah save
+            Navigator.pop(context, true);
           },
           child: Text("Save")))
         ],
